@@ -52,7 +52,8 @@ function App() {
                 </p>
 
                 <p className="mb-4">
-                    Each chart presents the percentage share of different energy sources.
+                    Each chart visualizes the share of different energy sources in the mix.
+                    Exact percentages are shown when you click or hover over the chart.
                     Clean energy includes: biomass, nuclear, hydro, solar and wind.
                 </p>
             </header>
