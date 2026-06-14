@@ -1,73 +1,144 @@
-# React + TypeScript + Vite
+# GB Energy Mix Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React and TypeScript frontend for a Great Britain energy mix dashboard.
 
-Currently, two official plugins are available:
+The application visualizes daily electricity generation mix data and displays the optimal electric vehicle charging window based on the highest share of clean energy.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+* Displays Great Britain energy mix data for three days:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+  * today
+  * tomorrow
+  * the day after tomorrow
+* Shows energy source percentages using pie charts
+* Displays the daily share of clean energy
+* Allows the user to enter EV charging duration from 1 to 6 full hours
+* Fetches the optimal EV charging window from the backend
+* Displays the start time, end time and average clean energy percentage for the best charging window
+* Uses responsive layout with Bootstrap
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+* React
+* TypeScript
+* Vite
+* Axios
+* Recharts
+* Bootstrap
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Backend API
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+This frontend consumes data from the Spring Boot backend:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+http://localhost:8080/api/v1
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Backend repository:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+https://github.com/szymonswierz/gb-energy-mix-backend
 ```
+
+## API Endpoints Used
+
+### Daily energy mix
+
+```http
+GET /api/v1/energy-mix-daily
+```
+
+Used to display three daily energy mix pie charts and clean energy percentages.
+
+### Optimal charging window
+
+```http
+GET /api/v1/optimal-charging-window/{hours}
+```
+
+Used to calculate the best EV charging window for the selected charging duration.
+
+Example response:
+
+```json
+{
+  "from": "2026-06-14T10:30Z",
+  "to": "2026-06-14T13:30Z",
+  "averageCleanEnergyPercentage": 68.9833333333333
+}
+```
+
+Times are returned in UTC.
+
+## Running Locally
+
+Clone the repository:
+
+```bash
+git clone https://github.com/szymonswierz/gb-energy-mix-frontend.git
+cd gb-energy-mix-frontend
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+The frontend will be available at:
+
+```text
+http://localhost:5173
+```
+
+The backend should be running locally at:
+
+```text
+http://localhost:8080
+```
+
+## Building the Project
+
+```bash
+npm run build
+```
+
+## Preview Production Build
+
+```bash
+npm run preview
+```
+
+## Project Structure
+
+```text
+src
+├── api
+│   └── neso.ts
+├── components
+│   ├── EnergyMixPieChart.tsx
+│   └── OptimalChargingWindow.tsx
+├── App.tsx
+└── main.tsx
+```
+
+## Main Views
+
+The application contains:
+
+* daily energy mix dashboard
+* three pie charts for energy source percentages
+* clean energy percentage summary for each day
+* EV charging duration input
+* optimal charging window result section
+
+## Status
+
+Frontend implementation is complete and connected to the local Spring Boot backend.
