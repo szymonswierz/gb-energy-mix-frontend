@@ -11,6 +11,9 @@ export const OptimalChargingWindow = () => {
     const [hours, setHours] = useState<number>(1);
     const [result, setResult] = useState<OptimalChargingWindowResponse | null>(null);
     const [error, setError] = useState<string>("");
+    const formatDateTime = (dateTime: string) => {
+        return dateTime.replace("T", " ").replace("Z", " UTC");
+    };
 
     const handleSubmit = () => {
         setError("");
@@ -38,10 +41,11 @@ export const OptimalChargingWindow = () => {
                     Optimal EV Charging Window
                 </h2>
 
-                <p className="text-muted mb-4">
+                <p className="mb-4">
                     Enter how many hours your electric vehicle needs to charge. The application
                     will find the best charging window in the next two days, based on the highest
-                    average share of clean energy in the energy mix.
+                    average share of clean energy in the whole mix. Please note that all times
+                    are shown in UTC and may differ from your local time zone.
                 </p>
 
                 <div className="row justify-content-center">
@@ -57,7 +61,13 @@ export const OptimalChargingWindow = () => {
                             max="6"
                             step="1"
                             value={hours}
-                            onChange={event => setHours(Number(event.target.value))}
+                            onChange={event => {
+                                if (event.target.value === "") {
+                                    return;
+                                }
+
+                                setHours(Number(event.target.value));
+                            }}
                             className="form-control text-center"
                         />
                     </div>
@@ -76,11 +86,11 @@ export const OptimalChargingWindow = () => {
                 {result && (
                     <div className="alert alert-success mt-4 mb-0">
                         <p>
-                            <strong>Start:</strong> {result.from}
+                            <strong>Start:</strong> {formatDateTime(result.from)}
                         </p>
 
                         <p>
-                            <strong>End:</strong> {result.to}
+                            <strong>End:</strong> {formatDateTime(result.to)}
                         </p>
 
                         <p className="mb-0">

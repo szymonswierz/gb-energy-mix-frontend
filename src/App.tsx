@@ -47,7 +47,7 @@ function App() {
                 </h1>
 
                 <p className="mb-4">
-                    This dashboard shows the electricity generation mix in Great Britain
+                    This dashboard shows the energy mix in Great Britain
                     for today, tomorrow and the day after tomorrow.
                 </p>
 
@@ -75,7 +75,7 @@ function App() {
                                     <strong className="text-success">
                                         {day.cleanEnergyPercentage.toFixed(2)}%
                                     </strong>{" "}
-                                    of the electricity generation mix.
+                                    of the energy mix.
                                 </p>
 
                                 <div className="w-100 mb-3">
