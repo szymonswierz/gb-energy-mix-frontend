@@ -8,7 +8,7 @@ type OptimalChargingWindowResponse = {
 };
 
 export const OptimalChargingWindow = () => {
-    const [hours, setHours] = useState<number>(1);
+    const [hours, setHours] = useState<string>("1");
     const [result, setResult] = useState<OptimalChargingWindowResponse | null>(null);
     const [error, setError] = useState<string>("");
     const formatDateTime = (dateTime: string) => {
@@ -19,12 +19,14 @@ export const OptimalChargingWindow = () => {
         setError("");
         setResult(null);
 
-        if (!Number.isInteger(hours) || hours < 1 || hours > 6) {
+        const parsedHours = Number(hours);
+
+        if (hours.trim() === "" || !Number.isInteger(parsedHours) || parsedHours < 1 || parsedHours > 6) {
             setError("Charging duration must be a full number of hours between 1 and 6.");
             return;
         }
 
-        getOptimalChargingWindow(hours)
+        getOptimalChargingWindow(parsedHours)
             .then(response => {
                 setResult(response);
             })
@@ -61,13 +63,7 @@ export const OptimalChargingWindow = () => {
                             max="6"
                             step="1"
                             value={hours}
-                            onChange={event => {
-                                if (event.target.value === "") {
-                                    return;
-                                }
-
-                                setHours(Number(event.target.value));
-                            }}
+                            onChange={event => setHours(event.target.value)}
                             className="form-control text-center"
                         />
                     </div>
